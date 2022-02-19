@@ -1,8 +1,9 @@
 package entity
 
 class Player(
-    val name: String
+    val name: String,
+    var handCards: MutableList<PlayCard>
     ) {
-    var score: Int? = null
-    val handCard: List<PlayCard>? = null
+    var score: Double = 0.0
+    var hasKnock = false
 }
