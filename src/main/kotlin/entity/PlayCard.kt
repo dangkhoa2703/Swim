@@ -16,6 +16,11 @@ class PlayCard(
         get() = suitEnum.toString()
 
     val value: Double = when (valueEnum) {
+        CardValue.TWO -> 2.0
+        CardValue.THREE -> 3.0
+        CardValue.FOUR -> 4.0
+        CardValue.FIVE -> 5.0
+        CardValue.SIX -> 6.0
         CardValue.SEVEN -> 7.0
         CardValue.EIGHT -> 8.0
         CardValue.NINE -> 9.0

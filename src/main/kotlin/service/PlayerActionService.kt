@@ -68,6 +68,10 @@ class PlayerActionService(private val rootService: RootService) {
         gameService.endTurn()
     }
 
+    /**
+     * TODO when a player chose to pass, if four player consecutily passed, 3 new cards are deal to the middle stack
+     *
+     */
      fun pass() {
         // retrieve current game from root service
          val currentGame = rootService.currentGame

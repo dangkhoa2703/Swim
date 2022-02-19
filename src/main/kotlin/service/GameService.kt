@@ -2,7 +2,11 @@ package service
 
 import entity.*
 
-
+/**
+ * TODO manage all the service, which the game provided
+ *
+ * @property rootService,through which this service can connect to entity layer
+ */
 class GameService(private val rootService: RootService): AbstractRefreshingService() {
 
     /**
@@ -45,7 +49,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         val card2 = player.handCards[1]
         val card3 = player.handCards[2]
         for(i in 0..2){
-            print("suit: ${player.handCards[i].suit} value:${player.handCards[i].value}")
+            println("suit: ${player.handCards[i].suit} value:${player.handCards[i].value}")
         }
         var temp = card1.value
         // three cards have the same suit
@@ -129,38 +133,41 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @return 0 if 2 cards are different; 1 if same value; 2 if same suit; 3 if same suit and same value
      */
     fun compareTwoCards (card1: PlayCard, card2: PlayCard): Int{
-        return if(card1.suit == card2.suit && card1.value == card2.value){
-            3
-        }else if(card1.suit == card2.suit){
+        return if(card1.suit == card2.suit && card1.valueEnum.toString() != card2.valueEnum.toString()){
+            println("same suit")
             2
-        }else if(card1.value == card2.value){
+        }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit != card2.suit){
+            println("same value")
             1
+        }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit == card2.suit){
+            println("same suit same value")
+            3
         }else{
             0
         }
     }
 
-//    /**
-//     * create the draw stack with 32 card
-//     */
-//    fun createDrawStack1() = MutableList(32) { index ->
-//        PlayCard(
-//            CardSuit.values()[index / 8],
-//            CardValue.values()[(index % 8) + 5]
-//        )
-//    }.shuffled() as MutableList<PlayCard>
-
+    /**
+     * TODO create a stack of 32 cards according the rule
+     *
+     * @return a mutable list of 32 PlayCard object
+     */
     fun createDrawStack(): MutableList<PlayCard> {
         val drawStack: MutableList<PlayCard> = mutableListOf()
+        val cardValue = mutableListOf<CardValue>(
+            CardValue.SEVEN,CardValue.EIGHT,CardValue.NINE,CardValue.TEN,CardValue.JACK,CardValue.QUEEN,CardValue.KING,CardValue.ACE)
         for (suitValue in CardSuit.values()) {
-            for (valueValue in CardValue.values()) {
+            for (valueValue in cardValue) {
                 drawStack.add(PlayCard(suitValue, valueValue))
             }
         }
         return drawStack.shuffled() as MutableList<PlayCard>
     }
+
     /**
-     * Draws 3 cards from draw stack.
+     * TODO deal 3 card from the draw stack to one player or the middle stack
+     *
+     * @return a mutable list of 3 PlayCard
      */
     fun deal3Card(): MutableList<PlayCard> {
         val drawStack: MutableList<PlayCard>? = rootService.currentGame?.drawStack
@@ -176,6 +183,12 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         return temp
     }
 
+    /**
+     * TODO draw 3 cards from the draw stack for one player or for the middle stack
+     *
+     * @param drawStack: draw from this stack
+     * @return a mutable list of 3 Playcard
+     */
     private fun createStackOf3(drawStack: MutableList<PlayCard>): MutableList<PlayCard> {
         val temp: MutableList<PlayCard> = mutableListOf()
         for(i in 0..2){

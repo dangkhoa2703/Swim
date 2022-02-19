@@ -45,7 +45,7 @@ class PlayerActionServiceTest {
         val middle = mc.currentGame?.middle
 
         val cardList2 = mutableListOf(
-            PlayCard(CardSuit.CLUBS, CardValue.QUEEN),
+            PlayCard(CardSuit.CLUBS, CardValue.TEN),
             PlayCard(CardSuit.DIAMONDS, CardValue.QUEEN),
             PlayCard(CardSuit.HEARTS, CardValue.QUEEN)
         )
