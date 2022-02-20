@@ -9,10 +9,10 @@ class PlayCardTest {
     private val kingOfHearts = PlayCard(CardSuit.HEARTS, CardValue.KING)
     private val jackOfDiamonds = PlayCard(CardSuit.DIAMONDS, CardValue.JACK)
 
-    @Test
-    fun testCompareSuit() {
-        assertEquals(kingOfHearts, queenOfHearts)
-        assertEquals(jackOfClubs, jackOfDiamonds)
-        assertNotEquals(jackOfClubs, jackOfDiamonds)
-    }
+//    @Test
+//    fun testCompareSuit() {
+//        assertEquals(kingOfHearts, queenOfHearts)
+//        assertEquals(jackOfClubs, jackOfDiamonds)
+//        assertNotEquals(jackOfClubs, jackOfDiamonds)
+//    }
 }
