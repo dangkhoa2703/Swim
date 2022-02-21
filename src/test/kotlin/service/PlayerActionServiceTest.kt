@@ -8,8 +8,8 @@ class PlayerActionServiceTest {
     @Test
     fun testKnock(){
         val mc = RootService()
-        val lastPlayerIndex = mc.gameService.currentPlayerIndex
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
+        val lastPlayerIndex = mc.gameService.currentPlayerIndex
         val players = mc.currentGame?.players
 
         checkNotNull(players)

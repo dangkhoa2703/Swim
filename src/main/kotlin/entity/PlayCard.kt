@@ -1,20 +1,26 @@
 package entity
 
 /**
- * TODO
+ * TODO play cards instructor
  *
- * @property suitEnum
- * @property valueEnum
+ * @property suitEnum card's suit( type: CardSuit)
+ * @property valueEnum card's value( type: CardValue )
  */
 
 class PlayCard(
     val suitEnum: CardSuit,
     val valueEnum: CardValue
-    ) {
-
+    )
+{
+    /**
+     * suit of the card( type: String )
+     */
     val suit: String
         get() = suitEnum.toString()
 
+    /**
+     * value of the card( type: Double )
+     */
     val value: Double = when (valueEnum) {
         CardValue.TWO -> 2.0
         CardValue.THREE -> 3.0
@@ -29,5 +35,5 @@ class PlayCard(
         CardValue.QUEEN -> 10.0
         CardValue.KING -> 10.0
         CardValue.ACE -> 11.0
-        }
     }
+}

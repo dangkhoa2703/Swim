@@ -72,12 +72,12 @@ class PlayerActionService(private val rootService: RootService) {
      * TODO when a player chose to pass, if four player consecutily passed, 3 new cards are deal to the middle stack
      *
      */
-     fun pass() {
+    fun pass() {
         // retrieve current game from root service
-         val currentGame = rootService.currentGame
-         val drawStack = currentGame?.drawStack
+        val currentGame = rootService.currentGame
+        val drawStack = currentGame?.drawStack
         checkNotNull(currentGame)
-         checkNotNull(drawStack)
+        checkNotNull(drawStack)
         //increment pass counter
         rootService.gameService.increasePassCounter()
         //check if all players chose to pass
