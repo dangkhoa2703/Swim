@@ -5,9 +5,12 @@ import tools.aqua.bgw.components.layoutviews.GridPane
 import tools.aqua.bgw.components.uicomponents.*
 import tools.aqua.bgw.visual.ColorVisual
 
+/**
+ * TODO new game scene constructor
+ *
+ */
 
-
-class SetupScene() : MenuScene(400,1080), Refreshable {
+class SetupScene : MenuScene(400,1080), Refreshable {
 
 
     private val grid: GridPane<UIComponent> = GridPane(200,540,columns = 2, rows = 6)

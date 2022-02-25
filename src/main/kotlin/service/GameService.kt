@@ -155,8 +155,15 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      */
     fun createDrawStack(): MutableList<PlayCard> {
         val drawStack: MutableList<PlayCard> = mutableListOf()
-        val cardValue = mutableListOf<CardValue>(
-            CardValue.SEVEN,CardValue.EIGHT,CardValue.NINE,CardValue.TEN,CardValue.JACK,CardValue.QUEEN,CardValue.KING,CardValue.ACE)
+        val cardValue = mutableListOf(
+            CardValue.SEVEN,
+            CardValue.EIGHT,
+            CardValue.NINE,
+            CardValue.TEN,
+            CardValue.JACK,
+            CardValue.QUEEN,
+            CardValue.KING,
+            CardValue.ACE)
         for (suitValue in CardSuit.values()) {
             for (valueValue in cardValue) {
                 drawStack.add(PlayCard(suitValue, valueValue))

@@ -4,6 +4,11 @@ import entity.Player
 import service.*
 import tools.aqua.bgw.core.BoardGameApplication
 
+/**
+ * TODO manage the switching between scene
+ *
+ */
+
 class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
 
     private val rootService = RootService()

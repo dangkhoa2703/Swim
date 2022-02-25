@@ -13,5 +13,4 @@ data class Swim(
     val names: MutableList<String>,
     var middle: MutableList<PlayCard>,
     var drawStack: MutableList<PlayCard>,
-    val players: MutableList<Player>) {
-}
+    val players: MutableList<Player>)

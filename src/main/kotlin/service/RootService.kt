@@ -8,7 +8,7 @@ import view.Refreshable
  *
  */
 
-class RootService() {
+class RootService {
 
     val gameService = GameService(this)
     val playerActionService = PlayerActionService(this)

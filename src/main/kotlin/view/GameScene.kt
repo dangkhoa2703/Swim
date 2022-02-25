@@ -12,6 +12,12 @@ import tools.aqua.bgw.core.Alignment
 import tools.aqua.bgw.visual.ImageVisual
 import tools.aqua.bgw.visual.ColorVisual
 
+/**
+ * TODO game scene constructor
+ *
+ * @property rootService
+ */
+
 class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080), Refreshable {
 
     private var playerCardIndex = 4
@@ -162,9 +168,15 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         }
     }
 
-    // label to inform the players the current state of the game
+    /**
+     * label for the current player's name
+     */
     val currentPlayerName = Label()
     private val nextPlayerLabel = Label( text = "Next player:")
+
+    /**
+     * label for the next player's name
+     */
     val nextPlayerName = Label()
     private val knockedPlayerLabel = Label(text = "Knocked player:")
     private val knockedPlayerName = Label(text = "-")
@@ -206,7 +218,8 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
 
         checkNotNull(game)
         currentPlayerName.text = game.players[rootService.gameService.currentPlayerIndex].name
-        nextPlayerName.text = game.players[(rootService.gameService.currentPlayerIndex+1) % game.players.size].name
+        nextPlayerName.text = game.players[
+                (rootService.gameService.currentPlayerIndex+1) % game.players.size].name
 
         grid.setRowCenterMode(0,Alignment.CENTER)
         grid.setRowCenterMode(2,Alignment.CENTER)
@@ -220,8 +233,11 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
 
     /*------------------------------------HELP FUNCTION------------------------------*/
 
-    private fun showCardBack(cardStack: MutableList<PlayCard>, cardImageLoader: CardImageLoader, stackView: List<LabeledStackView>){
-
+    private fun showCardBack(
+        cardStack: MutableList<PlayCard>,
+        cardImageLoader: CardImageLoader,
+        stackView: List<LabeledStackView>
+    ){
         for(i in 0..2){
             val cardView = CardView(
                 height = 200,
@@ -249,7 +265,7 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
             stackView[i].add(cardView)
         }
     }
-
+    // highlight the selected card
     private fun onSelectedPlayersCards(column: Int, row: Int, cardSide: String){
         if(cardSide == "middle") {
             grid.setRowCenterMode(0,Alignment.CENTER)

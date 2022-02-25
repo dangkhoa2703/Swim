@@ -1,7 +1,11 @@
 package view
 
-import service.AbstractRefreshingService
 import entity.Player
+
+/**
+ * TODO list all the available refresh method
+ *
+ */
 
 interface Refreshable {
 

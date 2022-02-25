@@ -9,6 +9,11 @@ import tools.aqua.bgw.core.MenuScene
 import tools.aqua.bgw.visual.ColorVisual
 import java.awt.Color
 
+/**
+ * TODO finish scene constructor
+ *
+ * @property players
+ */
 class GameFinishScene(val players: List<Player>) : MenuScene(400,1080), Refreshable {
 
     val grid = GridPane<UIComponent>(200,540,columns = 2, rows = 5)
