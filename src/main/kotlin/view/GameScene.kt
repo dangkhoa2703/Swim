@@ -242,7 +242,10 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
             val cardView = CardView(
                 height = 200,
                 width = 130,
-                front = ImageVisual(cardImageLoader.frontImageFor(cardStack[i].suitEnum, cardStack[i].valueEnum)),
+                front = ImageVisual(
+                    cardImageLoader.frontImageFor(cardStack[i].suitEnum,
+                        cardStack[i].valueEnum)
+                ),
                 back = ImageVisual(cardImageLoader.backImage)
             )
             cardView.showBack()
@@ -251,13 +254,19 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         }
     }
 
-    private fun showCardFront(cardStack: MutableList<PlayCard>, cardImageLoader: CardImageLoader, stackView: List<LabeledStackView>){
-
+    private fun showCardFront(
+        cardStack: MutableList<PlayCard>,
+        cardImageLoader: CardImageLoader,
+        stackView: List<LabeledStackView>)
+    {
         for(i in 0..2){
             val cardView = CardView(
                 height = 200,
                 width = 130,
-                front = ImageVisual(cardImageLoader.frontImageFor(cardStack[i].suitEnum, cardStack[i].valueEnum)),
+                front = ImageVisual(
+                    cardImageLoader.frontImageFor(cardStack[i].suitEnum,
+                        cardStack[i].valueEnum)
+                ),
                 back = ImageVisual(cardImageLoader.backImage)
             )
             cardView.showFront()

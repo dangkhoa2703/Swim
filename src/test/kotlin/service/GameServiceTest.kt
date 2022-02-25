@@ -2,7 +2,12 @@ package service
 
 import kotlin.test.*
 import entity.*
+import org.junit.jupiter.api.assertThrows
 
+/**
+ * TODO test the game service
+ *
+ */
 class GameServiceTest {
 
     private val cards = listOf(
@@ -39,17 +44,48 @@ class GameServiceTest {
         PlayCard(CardSuit.DIAMONDS, CardValue.QUEEN),
         PlayCard(CardSuit.DIAMONDS, CardValue.ACE)
     )
+
+    /**
+     * TODO test if after create new game, the number of player, cards in draw stack, cards in middle are correct
+     *
+     */
     @Test
     fun testStartNewGame(){
         val mc = RootService()
-        mc.gameService.startNewGame(mutableListOf("Harry","Ron","Hermione"))
-        val currentGame = mc.currentGame
-        checkNotNull(mc.currentGame)
-        assertEquals(3, currentGame!!.players.size)
-        assertEquals(20, currentGame.drawStack.size)
-        assertEquals(3, currentGame.middle.size)
+        mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
+        val fourPlayertGame = mc.currentGame
+        checkNotNull(fourPlayertGame)
+        assertEquals(4, fourPlayertGame.players.size)
+        assertEquals(17, fourPlayertGame.drawStack.size)
+        assertEquals(3, fourPlayertGame.middle.size)
+
+
+        mc.gameService.startNewGame(mutableListOf("p1","p2","p3"))
+        val threePlayerGame = mc.currentGame
+        checkNotNull(threePlayerGame)
+        assertEquals(3, threePlayerGame.players.size)
+        assertEquals(20, threePlayerGame.drawStack.size)
+        assertEquals(3, threePlayerGame.middle.size)
+
+        mc.gameService.startNewGame(mutableListOf("p1","p2"))
+        val twoPlayerGame = mc.currentGame
+        checkNotNull(twoPlayerGame)
+        assertEquals(2, twoPlayerGame.players.size)
+        assertEquals(23, twoPlayerGame.drawStack.size)
+        assertEquals(3, twoPlayerGame.middle.size)
+
+        assertThrows<IllegalArgumentException> {
+            mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4","p5"))
+        }
+        assertThrows<IllegalArgumentException> {
+            mc.gameService.startNewGame(mutableListOf("p1"))
+        }
     }
 
+    /**
+     * TODO test if the points are correctly calculated
+     *
+     */
     @Test
     fun testEvaluateCards(){
         val mc = RootService()
@@ -94,6 +130,10 @@ class GameServiceTest {
 
     }
 
+    /**
+     * TODO test if the PassCounter is set to 0 when calling function
+     *
+     */
     @Test
     fun testResetPassCounter(){
         val mc = RootService()
@@ -104,6 +144,10 @@ class GameServiceTest {
         assertEquals(0,mc.gameService.passCounter)
     }
 
+    /**
+     * TODO test if PassCounter is increase by 1 when calling function
+     *
+     */
     @Test
     fun testIncreasePassCounter(){
         val mc = RootService()
@@ -113,6 +157,10 @@ class GameServiceTest {
         assertEquals(2,mc.gameService.passCounter)
     }
 
+    /**
+     * TODO test if the next player index is corrected calculated
+     *
+     */
     @Test
     fun testEndTurn(){
         val mc = RootService()
@@ -128,6 +176,10 @@ class GameServiceTest {
         }
     }
 
+    /**
+     * TODO test if the point of the player are correctly calculated and showd in correctly orders
+     *
+     */
     @Test
     fun testEndGame(){
         val mc = RootService()
@@ -141,6 +193,10 @@ class GameServiceTest {
         assertTrue(temp[2].score >= temp[3].score)
     }
 
+    /**
+     * TODO test if the compare method function correctly
+     *
+     */
     @Test
     fun testCompareCards() {
         val mc = RootService()
@@ -151,6 +207,10 @@ class GameServiceTest {
         assertEquals(0,mc.gameService.compareTwoCards(cards[0],cards[9]))
     }
 
+    /**
+     * TODO test if the draw stack have the needed cards and cards number
+     *
+     */
     @Test
     fun testCreateDrawStack(){
         val mc = RootService()
@@ -161,6 +221,10 @@ class GameServiceTest {
 //        }
     }
 
+    /**
+     * TODO test if 3 cards are correctly dealed to the middle stack and player's hand
+     *
+     */
     @Test
     fun testDeal3Card(){
         val mc = RootService()

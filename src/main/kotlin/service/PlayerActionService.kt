@@ -50,30 +50,21 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      * @param middleCardIndex index of card in the middle stack, which the player chose to swap
      */
     fun swapOneCard(playerCardIndex : Int, middleCardIndex : Int) {
-        val handCards = rootService.gameService.currentPlayer?.handCards
-        val middle = rootService.currentGame?.middle
-        checkNotNull(handCards)
-        checkNotNull(middle)
+        val currentPlayer = rootService.gameService.currentPlayer
+        val currentGame = rootService.currentGame
+        checkNotNull(currentPlayer)
+        checkNotNull(currentGame)
         rootService.gameService.resetPassCounter()
 
-        val playerCardSuit = handCards[playerCardIndex].suitEnum
-        val playerCardValue = handCards[playerCardIndex].valueEnum
+        val playerCardSuit = currentPlayer.handCards[playerCardIndex].suitEnum
+        val playerCardValue = currentPlayer.handCards[playerCardIndex].valueEnum
 
-        handCards[playerCardIndex] = PlayCard(middle[middleCardIndex].suitEnum, middle[middleCardIndex].valueEnum)
-        middle[middleCardIndex] = PlayCard(playerCardSuit, playerCardValue)
+        currentPlayer.handCards[playerCardIndex] = PlayCard(
+            currentGame.middle[middleCardIndex].suitEnum,
+            currentGame.middle[middleCardIndex].valueEnum
+        )
+        currentGame.middle[middleCardIndex] = PlayCard(playerCardSuit, playerCardValue)
 
-//        currentPlayer.handCards.forEachIndexed { index, card ->
-//            if (gameService.compareTwoCards(card, playerCard) == 3) {
-//                val temp = currentPlayer.handCards[index]
-//                currentPlayer.handCards[index] = middleCard
-//            }
-//        }
-//
-//        currentGame?.middle?.forEachIndexed { index, card ->
-//            if (card == middleCard) {
-//                currentGame.middle[index] =
-//            }
-//        }
         onAllRefreshables { refreshAfterPlayerAction() }
     }
 
@@ -84,9 +75,8 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
     fun pass() {
         // retrieve current game from root service
         val currentGame = rootService.currentGame
-        val drawStack = currentGame?.drawStack
         checkNotNull(currentGame)
-        checkNotNull(drawStack)
+        val drawStack = currentGame.drawStack
         //increment pass counter
         rootService.gameService.increasePassCounter()
         //check if all players chose to pass

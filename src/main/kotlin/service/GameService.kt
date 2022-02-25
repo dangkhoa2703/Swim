@@ -33,9 +33,9 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         }
         val game = Swim(names, middle, drawStack,tempPlayer.toMutableList())
         rootService.currentGame = game
-        val players = rootService.currentGame?.players
-        checkNotNull(players)
-        currentPlayer = players[currentPlayerIndex]
+        val currentGame = rootService.currentGame
+        checkNotNull(currentGame)
+        currentPlayer = currentGame.players[currentPlayerIndex]
 
         onAllRefreshables { refreshAfterStartNewGame() }
     }

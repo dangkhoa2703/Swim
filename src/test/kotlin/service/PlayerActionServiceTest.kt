@@ -2,9 +2,19 @@ package service
 
 import kotlin.test.*
 import entity.*
+import org.junit.jupiter.api.assertThrows
 
+/**
+ * TODO test all the player's action
+ *
+ */
 class PlayerActionServiceTest {
 
+
+    /**
+     * TODO test if the passCounter has been reset and the next player are correctly calculated
+     *
+     */
     @Test
     fun testKnock(){
         val mc = RootService()
@@ -17,8 +27,16 @@ class PlayerActionServiceTest {
         assertTrue(players[lastPlayerIndex].hasKnock)
         assertEquals(0,mc.gameService.passCounter)
         assertEquals((lastPlayerIndex + 1) % players.size,mc.gameService.currentPlayerIndex)
+        assertThrows<IllegalStateException> {
+            mc.gameService.currentPlayer = null
+            mc.playerActionService.knock()
+        }
     }
 
+    /**
+     * TODO test if after the swap the player have the middle stack and vice versa
+     *
+     */
     @Test
     fun testSwapAllCards(){
         val mc = RootService()
@@ -34,8 +52,19 @@ class PlayerActionServiceTest {
         for(i in 0..2){
             assertEquals(3,mc.gameService.compareTwoCards(players[currentPlayerIndex].handCards[i], middle[i]))
         }
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.playerActionService.swapAllCards()
+        }
+        assertThrows<IllegalStateException> {
+            mc.gameService.currentPlayer = null
+            mc.playerActionService.swapAllCards()
+        }
     }
 
+    /**
+     * test if the card are correctly swapped
+     */
     @Test
     fun testSwapOneCard(){
         val mc = RootService()
@@ -65,8 +94,20 @@ class PlayerActionServiceTest {
         mc.playerActionService.swapOneCard(2,0)
         assertTrue(30.0 == mc.gameService.evaluatePlayCards(players[currentPlayerIndex]))
 
+        assertThrows<IllegalStateException> {
+            mc.gameService.currentPlayer = null
+            mc.playerActionService.swapOneCard(2,0)
+        }
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.playerActionService.swapOneCard(2,0)
+        }
     }
 
+    /**
+     * TODO test if the pass counter are correctly increased
+     *
+     */
     @Test
     fun testPass(){
         val mc = RootService()
@@ -77,9 +118,19 @@ class PlayerActionServiceTest {
         gameService.resetPassCounter()
         playerActionService.pass()
         assertEquals(1,gameService.passCounter)
+        assertEquals(1,gameService.currentPlayerIndex)
         playerActionService.pass()
         assertEquals(2,gameService.passCounter)
+        assertEquals(2,gameService.currentPlayerIndex)
         playerActionService.pass()
         assertEquals(3,gameService.passCounter)
+        assertEquals(3,gameService.currentPlayerIndex)
+        playerActionService.pass()
+        assertEquals(0,gameService.passCounter)
+
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.playerActionService.pass()
+        }
     }
 }
