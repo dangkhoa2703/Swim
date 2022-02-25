@@ -11,7 +11,7 @@ class CardImageLoaderTest {
     private val imageLoader: CardImageLoader = CardImageLoader()
 
     /**
-     * A queen of hearts test image that is used to be compared to images
+     * A queen of hearts test image that is used to be compared to image
      * loaded with [imageLoader]. Please note that it could be initialized
      * directly, but to showcase the use of the [BeforeTest] annotation, it
      * is initialized in [loadCompareImage]

@@ -8,9 +8,8 @@ import entity.*
  * @property rootService
  */
 
-class PlayerActionService(private val rootService: RootService) {
+class PlayerActionService(private val rootService: RootService) : AbstractRefreshingService() {
 
-    private val currentGame = rootService.currentGame
     private val gameService = rootService.gameService
 
     /**
@@ -41,35 +40,45 @@ class PlayerActionService(private val rootService: RootService) {
             currentGame.middle[i] = tempHandCards[i]
             currentPlayer.handCards[i] = tempMiddle[i]
         }
-        rootService.gameService.endTurn()
+        onAllRefreshables { refreshAfterPlayerAction() }
     }
 
     /**
      * TODO swap one card in player's hand with one in the middle stack
      *
-     * @param playerCard the card in the player's, which the player chose to swap
-     * @param middleCard the card in the middle stack, which the player chose to swap
+     * @param playerCardIndex index of card in the player's, which the player chose to swap
+     * @param middleCardIndex index of card in the middle stack, which the player chose to swap
      */
-    fun swapOneCard(playerCard : PlayCard, middleCard : PlayCard) {
-        val currentPlayer = rootService.gameService.currentPlayer
-        checkNotNull(currentPlayer)
+    fun swapOneCard(playerCardIndex : Int, middleCardIndex : Int) {
+        val handCards = rootService.gameService.currentPlayer?.handCards
+        val middle = rootService.currentGame?.middle
+        checkNotNull(handCards)
+        checkNotNull(middle)
         rootService.gameService.resetPassCounter()
-        currentPlayer.handCards.forEachIndexed { index, card ->
-            if (gameService.compareTwoCards(card, playerCard) == 3) {
-                currentPlayer.handCards[index] = middleCard
-            }
-        }
 
-        currentGame?.middle?.forEachIndexed { index, card ->
-            if (card == middleCard) {
-                currentGame.middle[index] = playerCard
-            }
-        }
-        gameService.endTurn()
+        val playerCardSuit = handCards[playerCardIndex].suitEnum
+        val playerCardValue = handCards[playerCardIndex].valueEnum
+
+        handCards[playerCardIndex] = PlayCard(middle[middleCardIndex].suitEnum, middle[middleCardIndex].valueEnum)
+        middle[middleCardIndex] = PlayCard(playerCardSuit, playerCardValue)
+
+//        currentPlayer.handCards.forEachIndexed { index, card ->
+//            if (gameService.compareTwoCards(card, playerCard) == 3) {
+//                val temp = currentPlayer.handCards[index]
+//                currentPlayer.handCards[index] = middleCard
+//            }
+//        }
+//
+//        currentGame?.middle?.forEachIndexed { index, card ->
+//            if (card == middleCard) {
+//                currentGame.middle[index] =
+//            }
+//        }
+        onAllRefreshables { refreshAfterPlayerAction() }
     }
 
     /**
-     * TODO when a player chose to pass, if four player consecutily passed, 3 new cards are deal to the middle stack
+     * TODO when a player chose to pass, if four player consecutively passed, 3 new cards are deal to the middle stack
      *
      */
     fun pass() {
@@ -89,7 +98,7 @@ class PlayerActionService(private val rootService: RootService) {
                 //change middle stack, reset pass counter and refresh scene
                 currentGame.middle = gameService.deal3Card().toMutableList()
                 rootService.gameService.resetPassCounter()
-//                RefreshAfterPass()
+                onAllRefreshables { refreshAfterPlayerAction() }
             }
             //end game and refresh scene
             else

@@ -36,6 +36,8 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         val players = rootService.currentGame?.players
         checkNotNull(players)
         currentPlayer = players[currentPlayerIndex]
+
+        onAllRefreshables { refreshAfterStartNewGame() }
     }
 
     /**
@@ -106,6 +108,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
             currentPlayer = players[nextPlayerIndex]
             currentPlayerIndex = nextPlayerIndex
         }
+        onAllRefreshables { refreshAfterEndTurn() }
     }
 
     /**
@@ -119,6 +122,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         for(player in players){
             player.score = evaluatePlayCards(player)
         }
+        onAllRefreshables { refreshAfterEndGame(players.toList().sortedByDescending{ player -> player.score }) }
         return players.toList().sortedByDescending{ player -> player.score }
     }
 
@@ -134,13 +138,10 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      */
     fun compareTwoCards (card1: PlayCard, card2: PlayCard): Int{
         return if(card1.suit == card2.suit && card1.valueEnum.toString() != card2.valueEnum.toString()){
-            println("same suit")
             2
         }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit != card2.suit){
-            println("same value")
             1
         }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit == card2.suit){
-            println("same suit same value")
             3
         }else{
             0

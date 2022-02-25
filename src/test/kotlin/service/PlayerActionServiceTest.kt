@@ -62,7 +62,7 @@ class PlayerActionServiceTest {
             middle[i] = cardList2[i]
         }
 
-        mc.playerActionService.swapOneCard(players[currentPlayerIndex].handCards[2],middle[0])
+        mc.playerActionService.swapOneCard(2,0)
         assertTrue(30.0 == mc.gameService.evaluatePlayCards(players[currentPlayerIndex]))
 
     }
