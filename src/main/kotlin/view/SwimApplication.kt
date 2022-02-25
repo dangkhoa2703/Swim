@@ -11,13 +11,13 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
     private val gameScene = GameScene(rootService)
 
 
-    private val setupScene = SetupScene(rootService).apply {
+    private val setupScene = SetupScene().apply {
         quitButton.onMouseClicked = {
             exit()
         }
         startButton.onMouseClicked = {
             for(playerInput in playerInputs){
-                if(!playerInput.text.isBlank()){
+                if(playerInput.text.isNotBlank()){
                     players.add(playerInput.text)
                 }
             }
@@ -36,10 +36,6 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
             gameScene,
         )
         this.showGameScene(gameScene)
-//            val gameScene = GameScene(rootService)
-//            rootService.addRefreshables(gameScene)
-//            this@SwimApplication.showGameScene(gameScene)
-//        }
         this.showMenuScene(setupScene, 0)
     }
 

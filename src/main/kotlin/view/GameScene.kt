@@ -208,10 +208,14 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         currentPlayerName.text = game.players[rootService.gameService.currentPlayerIndex].name
         nextPlayerName.text = game.players[(rootService.gameService.currentPlayerIndex+1) % game.players.size].name
 
-        knockButton.isDisabled = true
-        passButton.isDisabled = true
+        grid.setRowCenterMode(0,Alignment.CENTER)
+        grid.setRowCenterMode(2,Alignment.CENTER)
+
+
+        knockButton.isDisabled = false
+        passButton.isDisabled = false
         swapAllCardButton.isDisabled = false
-        swapOneCardButton.isDisabled = true
+        swapOneCardButton.isDisabled = false
     }
 
     /*------------------------------------HELP FUNCTION------------------------------*/
