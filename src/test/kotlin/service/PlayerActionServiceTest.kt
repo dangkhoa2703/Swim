@@ -129,17 +129,21 @@ class PlayerActionServiceTest {
         playerActionService.pass()
         assertEquals(0,gameService.passCounter)
 
+        val game = mc.currentGame
+        checkNotNull(game)
+        game.drawStack = mutableListOf(
+            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
+            PlayCard(CardSuit.CLUBS, CardValue.EIGHT)
+        )
+        mc.gameService.passCounter = 3
+        mc.playerActionService.pass()
+        assertNotEquals(0.0, game.players[0].score)
+
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.playerActionService.pass()
         }
 
-        mc.currentGame?.drawStack = mutableListOf(
-            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
-            PlayCard(CardSuit.CLUBS, CardValue.EIGHT)
-        )
-        mc.gameService.passCounter = 4
-        mc.playerActionService.pass()
-        assertNotEquals(0.0, mc.gameService.currentPlayer?.score)
+
     }
 }
