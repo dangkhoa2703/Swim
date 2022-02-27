@@ -21,7 +21,7 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
             exit()
         }
         startButton.onMouseClicked = {
-            rootService.gameService.resetGame()
+            resetGame()
             val players: MutableList<String> = mutableListOf()
             players.add(p1Input.text)
             players.add(p2Input.text)
@@ -31,9 +31,18 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
             rootService.gameService.startNewGame(players)
             val game = rootService.currentGame
             checkNotNull(game)
-//            gameScene.currentPlayerName.text = game.players[0].name
-//            gameScene.nextPlayerName.text = game.players[1].name
         }
+    }
+
+    /**
+     * TODO reset current game, passCounter, currentPlayer and currentPlayerIndex
+     *
+     */
+    private fun resetGame(){
+        rootService.currentGame = null
+        rootService.gameService.resetPassCounter()
+        rootService.gameService.currentPlayer = null
+        rootService.gameService.currentPlayerIndex = 0
     }
 
     init{

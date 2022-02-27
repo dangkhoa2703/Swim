@@ -206,15 +206,4 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         return temp
     }
 
-    /**
-     * TODO reset current game, passCounter, currentPlayer and currentPlayerIndex
-     *
-     */
-    fun resetGame(){
-        rootService.currentGame = null
-        resetPassCounter()
-        currentPlayer = null
-        currentPlayerIndex = 0
-    }
-
 }
