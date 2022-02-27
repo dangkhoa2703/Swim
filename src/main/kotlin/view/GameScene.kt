@@ -316,6 +316,10 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         }
     }
 
+    /**
+     * TODO reset knockButton and knockedPlayerName to original setup
+     *
+     */
     fun resetGameScene() {
         hasSomeOneKnocked = false
         knockedPlayerName.text = "-"

@@ -50,22 +50,24 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         val card1 = player.handCards[0]
         val card2 = player.handCards[1]
         val card3 = player.handCards[2]
+
+        var totalValue = 0.0
         for(i in 0..2){
             println("suit: ${player.handCards[i].suit} value:${player.handCards[i].value}")
         }
         var temp = card1.value
         // three cards have the same suit
         if(compareTwoCards(card1,card2) == 2 && compareTwoCards(card1,card3) == 2){
-            return card1.value + card2.value + card3.value
+            totalValue = card1.value + card2.value + card3.value
         }
         // three cards have the same value
         else if(compareTwoCards(card1,card2) == 1 && compareTwoCards(card1,card3) == 1){
-            return 30.5
+            totalValue = 30.5
         }
         // two of three cards have the same suit
-        else if(compareTwoCards(card1,card2) == 2) { return card1.value + card2.value }
-        else if(compareTwoCards(card1,card3) == 2) { return card1.value + card3.value }
-        else if(compareTwoCards(card2,card3) == 2) { return card2.value + card3.value }
+        else if(compareTwoCards(card1,card2) == 2) { totalValue = card1.value + card2.value }
+        else if(compareTwoCards(card1,card3) == 2) { totalValue = card1.value + card3.value }
+        else if(compareTwoCards(card2,card3) == 2) { totalValue = card2.value + card3.value }
         // all 3 cards are different to each other
         else{
             for(i in 1..2){
@@ -73,8 +75,9 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
                     temp = player.handCards[i].value
                 }
             }
-            return temp
+            totalValue = temp
         }
+        return totalValue
     }
 
 
