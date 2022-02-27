@@ -2,6 +2,7 @@ package service
 
 import kotlin.test.*
 import entity.*
+import main
 import org.junit.jupiter.api.assertThrows
 
 /**
@@ -42,8 +43,7 @@ class PlayerActionServiceTest {
         val mc = RootService()
         val testRefreshable1 = TestRefreshable()
         val testRefreshable2 = TestRefreshable()
-        mc.addRefreshable(testRefreshable2)
-        mc.addRefreshable(testRefreshable1)
+        mc.addRefreshables(testRefreshable1,testRefreshable2)
         testRefreshable1.reset()
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         val currentPlayerIndex = mc.gameService.currentPlayerIndex
@@ -55,6 +55,8 @@ class PlayerActionServiceTest {
         mc.playerActionService.swapAllCards()
         assertTrue(testRefreshable1.refreshAfterPlayerActionCalled)
         assertTrue(testRefreshable2.refreshAfterPlayerActionCalled)
+//        assertEquals(mc.gameService.refreshables[0],testRefreshable1)
+//        assertEquals(mc.gameService.refreshables[1],testRefreshable2)
         assertEquals(0,mc.gameService.passCounter)
         for(i in 0..2){
             assertEquals(3,mc.gameService.compareTwoCards(players[currentPlayerIndex].handCards[i], middle[i]))
@@ -159,7 +161,13 @@ class PlayerActionServiceTest {
             mc.playerActionService.pass()
             assertFalse(testRefreshable.refreshAfterPlayerActionCalled)
         }
-
-
     }
+
+
+//    @Test
+//    fun testMain(){
+//        val swim = main()
+//        assertEquals("SWIM",swim.)
+//    }
+
 }

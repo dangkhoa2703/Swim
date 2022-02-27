@@ -61,7 +61,7 @@ class GameServiceTest {
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         val fourPlayerGame = mc.currentGame
 
-        checkNotNull(fourPlayerGame)
+        assertNotNull(fourPlayerGame)
         assertEquals("p1",fourPlayerGame.names[0])
         assertEquals("p2",fourPlayerGame.names[1])
         assertEquals("p3",fourPlayerGame.names[2])
