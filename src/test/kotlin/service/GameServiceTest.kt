@@ -56,11 +56,11 @@ class GameServiceTest {
     fun testStartNewGame(){
         val mc = RootService()
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
-        val fourPlayertGame = mc.currentGame
-        checkNotNull(fourPlayertGame)
-        assertEquals(4, fourPlayertGame.players.size)
-        assertEquals(17, fourPlayertGame.drawStack.size)
-        assertEquals(3, fourPlayertGame.middle.size)
+        val fourPlayerGame = mc.currentGame
+        checkNotNull(fourPlayerGame)
+        assertEquals(4, fourPlayerGame.players.size)
+        assertEquals(17, fourPlayerGame.drawStack.size)
+        assertEquals(3, fourPlayerGame.middle.size)
 
 
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3"))
@@ -118,6 +118,12 @@ class GameServiceTest {
             PlayCard(CardSuit.SPADES, CardValue.EIGHT)
         )
 
+        val cardList5 = mutableListOf(
+            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
+            PlayCard(CardSuit.DIAMONDS, CardValue.NINE),
+            PlayCard(CardSuit.DIAMONDS, CardValue.QUEEN)
+        )
+
         val players = mc.currentGame?.players
         checkNotNull(players)
 
@@ -130,6 +136,9 @@ class GameServiceTest {
         assertEquals(20.0,mc.gameService.evaluatePlayCards(players[2]))
         assertEquals(9.0,mc.gameService.evaluatePlayCards(players[3]))
         assertEquals(31.0,mc.gameService.evaluatePlayCards(players[0]))
+
+        mc.currentGame!!.players[3] = Player("p5",cardList5)
+        assertEquals(19.0,mc.gameService.evaluatePlayCards(players[3]))
 
     }
 
@@ -169,13 +178,20 @@ class GameServiceTest {
         val mc = RootService()
         mc.gameService.startNewGame(mutableListOf("Harry","Ron","Hermione"))
         val currentGame = mc.currentGame
-        checkNotNull(mc.currentGame)
+        checkNotNull(currentGame)
         mc.gameService.endTurn()
         mc.gameService.endTurn()
         mc.gameService.endTurn()
         val index = mc.gameService.currentPlayerIndex
-        if (currentGame != null) {
-            assertEquals(0,index)
+        assertEquals(0,index)
+
+        currentGame.players[1].hasKnock = true
+        mc.gameService.endTurn()
+        assertNotEquals(0.0,currentGame.players[1].score)
+
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.gameService.endTurn()
         }
     }
 
@@ -194,6 +210,11 @@ class GameServiceTest {
         assertTrue(temp[0].score >= temp[1].score)
         assertTrue(temp[1].score >= temp[2].score)
         assertTrue(temp[2].score >= temp[3].score)
+
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.gameService.endGame()
+        }
     }
 
     /**
@@ -238,6 +259,13 @@ class GameServiceTest {
         val tempList = mc.gameService.deal3Card()
         assertEquals(3, tempList.size)
         assertTrue(sizeBeforeDeal > drawStack.size)
+
+
+        assertThrows<IllegalArgumentException> {
+            mc.currentGame?.drawStack = mutableListOf(cards[0],cards[1])
+            mc.gameService.deal3Card()
+        }
+
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.gameService.deal3Card()

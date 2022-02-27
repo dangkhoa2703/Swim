@@ -53,11 +53,11 @@ class PlayerActionServiceTest {
             assertEquals(3,mc.gameService.compareTwoCards(players[currentPlayerIndex].handCards[i], middle[i]))
         }
         assertThrows<IllegalStateException> {
-            mc.currentGame = null
+            mc.gameService.currentPlayer = null
             mc.playerActionService.swapAllCards()
         }
         assertThrows<IllegalStateException> {
-            mc.gameService.currentPlayer = null
+            mc.currentGame = null
             mc.playerActionService.swapAllCards()
         }
     }
@@ -95,13 +95,14 @@ class PlayerActionServiceTest {
         assertTrue(30.0 == mc.gameService.evaluatePlayCards(players[currentPlayerIndex]))
 
         assertThrows<IllegalStateException> {
-            mc.gameService.currentPlayer = null
-            mc.playerActionService.swapOneCard(2,0)
-        }
-        assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.playerActionService.swapOneCard(2,0)
         }
+        assertThrows<IllegalStateException> {
+            mc.gameService.currentPlayer = null
+            mc.playerActionService.swapOneCard(2,0)
+        }
+
     }
 
     /**
@@ -132,5 +133,13 @@ class PlayerActionServiceTest {
             mc.currentGame = null
             mc.playerActionService.pass()
         }
+
+        mc.currentGame?.drawStack = mutableListOf(
+            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
+            PlayCard(CardSuit.CLUBS, CardValue.EIGHT)
+        )
+        mc.gameService.passCounter = 4
+        mc.playerActionService.pass()
+        assertNotEquals(0.0, mc.gameService.currentPlayer?.score)
     }
 }

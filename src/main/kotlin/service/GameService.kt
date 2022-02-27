@@ -51,7 +51,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         val card2 = player.handCards[1]
         val card3 = player.handCards[2]
 
-        var totalValue = 0.0
+        val totalValue: Double
         for(i in 0..2){
             println("suit: ${player.handCards[i].suit} value:${player.handCards[i].value}")
         }
@@ -102,13 +102,13 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      *
      */
     fun endTurn(){
-        val players = rootService.currentGame?.players
-        checkNotNull(players)
-        val nextPlayerIndex = (currentPlayerIndex+1) % players.size
-        if(players[nextPlayerIndex].hasKnock){
+        val game = rootService.currentGame
+        checkNotNull(game)
+        val nextPlayerIndex = (currentPlayerIndex+1) % game.players.size
+        if(game.players[nextPlayerIndex].hasKnock){
             endGame()
         }else {
-            currentPlayer = players[nextPlayerIndex]
+            currentPlayer = game.players[nextPlayerIndex]
             currentPlayerIndex = nextPlayerIndex
         }
         onAllRefreshables { refreshAfterEndTurn() }
@@ -120,13 +120,13 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @return list of increasing order score list of players
      */
     fun endGame(): List<Player>{
-        val players = rootService.currentGame?.players
-        checkNotNull(players)
-        for(player in players){
+        val game = rootService.currentGame
+        checkNotNull(game)
+        for(player in game.players){
             player.score = evaluatePlayCards(player)
         }
-        onAllRefreshables { refreshAfterEndGame(players.toList().sortedByDescending{ player -> player.score }) }
-        return players.toList().sortedByDescending{ player -> player.score }
+        onAllRefreshables { refreshAfterEndGame(game.players.toList().sortedByDescending{ player -> player.score }) }
+        return game.players.toList().sortedByDescending{ player -> player.score }
     }
 
 
@@ -140,13 +140,15 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @return 0 if 2 cards are different; 1 if same value; 2 if same suit; 3 if same suit and same value
      */
     fun compareTwoCards (card1: PlayCard, card2: PlayCard): Int{
-        var result = 0
+        val result: Int
         if(card1.suit == card2.suit && card1.valueEnum.toString() != card2.valueEnum.toString()){
             result = 2
         }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit != card2.suit){
             result = 1
         }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit == card2.suit){
             result = 3
+        }else{
+            result = 0
         }
         return result
     }
