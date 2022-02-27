@@ -21,16 +21,18 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
             exit()
         }
         startButton.onMouseClicked = {
-            for(playerInput in playerInputs){
-                if(playerInput.text.isNotBlank()){
-                    players.add(playerInput.text)
-                }
-            }
+            rootService.gameService.resetGame()
+            val players: MutableList<String> = mutableListOf()
+            players.add(p1Input.text)
+            players.add(p2Input.text)
+            players.add(p3Input.text)
+            players.add(p4Input.text)
+            players.removeIf { name -> name.isBlank() }
             rootService.gameService.startNewGame(players)
-            val players = rootService.currentGame?.players
-            checkNotNull(players)
-            gameScene.currentPlayerName.text = players[0].name
-            gameScene.nextPlayerName.text = players[1].name
+            val game = rootService.currentGame
+            checkNotNull(game)
+//            gameScene.currentPlayerName.text = game.players[0].name
+//            gameScene.nextPlayerName.text = game.players[1].name
         }
     }
 
@@ -50,6 +52,7 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
 
     override fun refreshAfterEndGame(players: List<Player>) {
         val finishScene = GameFinishScene(players).apply {
+            gameScene.resetGameScene()
             newGameButton.onMouseClicked = {
                 this@SwimApplication.showMenuScene(setupScene)
             }

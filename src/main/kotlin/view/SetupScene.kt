@@ -3,6 +3,7 @@ package view
 import tools.aqua.bgw.core.MenuScene
 import tools.aqua.bgw.components.layoutviews.GridPane
 import tools.aqua.bgw.components.uicomponents.*
+import tools.aqua.bgw.util.Font
 import tools.aqua.bgw.visual.ColorVisual
 
 /**
@@ -13,21 +14,30 @@ import tools.aqua.bgw.visual.ColorVisual
 class SetupScene : MenuScene(400,1080), Refreshable {
 
 
-    private val grid: GridPane<UIComponent> = GridPane(200,540,columns = 2, rows = 6)
-//    private val firstPlayerGrid: GridPane<UIComponent> =
+    private val mainGrid: GridPane<GridPane<UIComponent>> = GridPane(200,540,columns = 1, rows = 3)
+    private val swimGrid = GridPane<UIComponent>(columns = 1, rows = 1)
+    private val playerGrid = GridPane<UIComponent>(columns = 2,rows = 4)
+    private val buttonsGrid = GridPane<UIComponent>(columns = 3, rows = 1)
+
+    private val swimFont = Font(100, fontWeight = Font.FontWeight.BOLD)
+    private val titlesFont = Font(20, fontWeight = Font.FontWeight.BOLD)
 
     private val headLineLabel = Label(
         text = "SWIM",
-        height = 100,
-        width = 100
-    )
+        height = 300,
+        width = 300,
+        font = swimFont
+    ).apply{
 
-    private val p1Label: Label = Label(
-        width = 100, height = 35,
-        text = "Player 1:"
-    )
+    }
 
-    private val p1Input: TextField = TextField(
+//    private val p1Label: Label = Label(
+//        width = 100, height = 35,
+//        text = "Player 1:",
+//        font = titlesFont
+//    )
+
+    val p1Input: TextField = TextField(
         width = 200, height = 35
     ).apply {
         onKeyTyped = {
@@ -36,13 +46,14 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         }
     }
 
-    private val p2Label = Label(
-        width = 100, height = 35,
-        text = "Player 2:"
-    )
+//    private val p2Label = Label(
+//        width = 100, height = 35,
+//        text = "Player 2:",
+//        font = titlesFont
+//    )
 
 
-    private val p2Input: TextField = TextField(
+    val p2Input: TextField = TextField(
         width = 200, height = 35
     ).apply {
         onKeyTyped = {
@@ -52,12 +63,13 @@ class SetupScene : MenuScene(400,1080), Refreshable {
     }
 
 
-    private val p3Label = Label(
-        width = 100, height = 35,
-        text = "Player 3:"
-    )
+//    private val p3Label = Label(
+//        width = 100, height = 35,
+//        text = "Player 3:",
+//        font = titlesFont
+//    )
 
-    private val p3Input: TextField = TextField(
+    val p3Input: TextField = TextField(
         width = 200, height = 35
     ).apply {
         onKeyTyped = {
@@ -66,12 +78,13 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         }
     }
 
-    private val p4Label = Label(
-        width = 100, height = 35,
-        text = "Player 4:"
-    )
+//    private val p4Label = Label(
+//        width = 100, height = 35,
+//        text = "Player 4:",
+//        font = titlesFont
+//    )
 
-    private val p4Input: TextField = TextField(
+    val p4Input: TextField = TextField(
         width = 200, height = 35
     ).apply {
         onKeyTyped = {
@@ -80,10 +93,19 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         }
     }
 
-    val playerInputs = listOf(p1Input,p2Input,p3Input,p4Input)
-
-    val players = mutableListOf<String>()
-
+//    val labelsList = listOf(p1Label,p2Label,p3Label,p4Label)
+private val labelsList: MutableList<Label> = mutableListOf()
+    init{
+        for(i in 0..3){
+            val playerLabel = Label(
+                width = 100, height = 35,
+                text = "Player ${i+1}:",
+                font = titlesFont
+            )
+            labelsList.add(playerLabel)
+        }
+    }
+    private val inputsList = listOf(p1Input,p2Input,p3Input,p4Input)
 
     val startButton: Button = Button(
         width = 140, height = 35,
@@ -100,24 +122,35 @@ class SetupScene : MenuScene(400,1080), Refreshable {
     }
 
     init{
-        grid[0,0] = headLineLabel
-        grid[0,1] = p1Label; grid[1,1] = p1Input
-        grid[0,2] = p2Label; grid[1,2] = p2Input
-        grid[0,3] = p3Label; grid[1,3] = p3Input
-        grid[0,4] = p4Label; grid[1,4] = p4Input
+        swimGrid[0,0] = headLineLabel
+        mainGrid.setRowHeight(0,150)
+        mainGrid[0,0] = swimGrid
 
-        grid[0,5] = startButton
-        grid[1,5] = quitButton
 
-        for(i in 0..4){
-            grid.setRowHeight(i,100)
+        for(i in 0..3){
+            playerGrid[0,i] = labelsList[i]
+            playerGrid[1,i] = inputsList[i]
+            playerGrid.setRowHeight(i,50)
         }
+        playerGrid.setColumnWidth(0,100)
+//        playerGrid.setColumnWidth(1,300)
+        mainGrid[0,1] = playerGrid
 
-        grid.setRowHeight(5,300)
+        buttonsGrid[0,0] = startButton
+        buttonsGrid[2,0] = quitButton
+        buttonsGrid.setColumnWidth(1,50)
+        buttonsGrid.setRowHeight(0,360)
+        mainGrid[0,2] = buttonsGrid
+
+//        for(i in 0..4){
+//            mainGrid.setRowHeight(i,100)
+//        }
+//
+//        mainGrid.setRowHeight(5,300)
 
         background = ColorVisual(244,241,222)
 
-        addComponents(grid)
+        addComponents(mainGrid)
     }
 
 

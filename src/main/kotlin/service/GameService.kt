@@ -178,15 +178,15 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @return a mutable list of 3 PlayCard
      */
     fun deal3Card(): MutableList<PlayCard> {
-        val drawStack: MutableList<PlayCard>? = rootService.currentGame?.drawStack
-        checkNotNull(drawStack)
-        require(drawStack.size >= 3){
+        val currentGame = rootService.currentGame
+        checkNotNull(currentGame)
+        require(currentGame.drawStack.size >= 3){
             "no more cards in draw stack"
         }
         val temp: MutableList<PlayCard> = mutableListOf()
         for(i in 0..2){
-            temp.add(i,drawStack[0])
-            drawStack.removeAt(0)
+            temp.add(i,currentGame.drawStack[0])
+            currentGame.drawStack.removeAt(0)
         }
         return temp
     }
@@ -204,6 +204,17 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
             drawStack.removeAt(0)
         }
         return temp
+    }
+
+    /**
+     * TODO reset current game, passCounter, currentPlayer and currentPlayerIndex
+     *
+     */
+    fun resetGame(){
+        rootService.currentGame = null
+        resetPassCounter()
+        currentPlayer = null
+        currentPlayerIndex = 0
     }
 
 }

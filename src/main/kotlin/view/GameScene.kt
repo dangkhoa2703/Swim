@@ -9,6 +9,7 @@ import tools.aqua.bgw.components.uicomponents.*
 import tools.aqua.bgw.components.gamecomponentviews.CardView
 import tools.aqua.bgw.components.ComponentView
 import tools.aqua.bgw.core.Alignment
+import tools.aqua.bgw.util.Font
 import tools.aqua.bgw.visual.ImageVisual
 import tools.aqua.bgw.visual.ColorVisual
 
@@ -22,13 +23,18 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
 
     private var playerCardIndex = 4
     private var middleCardIndex = 4
+    private var playerHasNotTookAction = true
+    private var hasSomeOneKnocked = false
 
-    private val grid = GridPane<ComponentView>(960,540,columns = 5, rows = 3)
+    private val mainGrid = GridPane<ComponentView>(960,540,columns = 5, rows = 3)
     private val buttonGrid = GridPane<ComponentView>(225,830, columns = 1, rows = 4)
     private val nextPlayerGrid = GridPane<ComponentView>(1695,250, columns = 1, rows = 5)
     private val rightSideButtonGrid = GridPane<ComponentView>(1695,830,columns = 1, rows = 2)
 
     private val drawStack = LabeledStackView(label = "draw stack")
+
+    private val playersNameFont = Font(20)
+    private val titlesFont = Font(20, fontWeight = Font.FontWeight.BOLD)
 
     /**
      * create container for middle stack and player's cards
@@ -77,7 +83,8 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
 
     private val playersCardLabeledStackView = listOf(playersFirstCard,playersSecondCard,playersThirdCard)
 
-    // create the button to pass player's action to service layer
+    /*-----------------------------BUTTON-----------------------------*/
+
     private val knockButton = Button(
         width = 140, height = 35,
         text = "KNOCK!!!"
@@ -86,15 +93,18 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         onMouseClicked = {
             val playersName = rootService.gameService.currentPlayer?.name
             checkNotNull(playersName)
+
             this.isDisabled = true
             knockedPlayerName.text = playersName
+            hasSomeOneKnocked = true
+
             rootService.playerActionService.knock()
         }
     }
 
+    //PASS BUTTON
     private val passButton = Button(
         width = 140, height = 35,
-        posX = 210, posY = 240,
         text = "Pass"
     ).apply {
         visual = ColorVisual(242,204,143)
@@ -103,6 +113,7 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         }
     }
 
+    //SWAP ONE CARD BUTTON
     private val swapOneCardButton = Button(
         width = 140, height = 35,
         text = "Change one card"
@@ -115,19 +126,21 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
             checkNotNull(middle){"game was not initialized"}
             rootService.playerActionService.swapOneCard(playerCardIndex, middleCardIndex)
 
-            grid.setRowCenterMode(0,Alignment.CENTER)
-            grid.setRowCenterMode(2,Alignment.CENTER)
+            mainGrid.setRowCenterMode(0,Alignment.CENTER)
+            mainGrid.setRowCenterMode(2,Alignment.CENTER)
 
             knockButton.isDisabled = true
             passButton.isDisabled = true
             this.isDisabled = true
             swapAllCardButton.isDisabled = true
+
+            endTurnButton.isDisabled = false
         }
     }
 
+    //SWAP ALL CARD BUTTON
     private val swapAllCardButton: Button = Button(
         width = 140, height = 35,
-        posX = 210, posY = 240,
         text = "Change all card"
     ).apply {
         visual = ColorVisual(242,204,143)
@@ -138,12 +151,14 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
             passButton.isDisabled = true
             swapOneCardButton.isDisabled = true
             this.isDisabled = true
+
+            endTurnButton.isDisabled = false
         }
     }
 
+    //FLIP CARD BUTTON
     private val flipCardButton = Button(
         width = 140, height = 35,
-        posX = 210, posY = 240,
         text = "Flip card"
     ).apply {
         visual = ColorVisual(242,204,143)
@@ -157,29 +172,37 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         }
     }
 
+    //END TURN BUTTON
     private val endTurnButton = Button(
         width = 140, height = 35,
-        posX = 210, posY = 240,
         text = "End turn"
     ).apply {
         visual = ColorVisual(242,204,143)
+        this.isDisabled = playerHasNotTookAction
         onMouseClicked = {
             rootService.gameService.endTurn()
         }
     }
 
-    /**
-     * label for the current player's name
-     */
-    val currentPlayerName = Label()
-    private val nextPlayerLabel = Label( text = "Next player:")
+    /*--------------------End-of-button-area-------------------*/
 
-    /**
-     * label for the next player's name
-     */
-    val nextPlayerName = Label()
-    private val knockedPlayerLabel = Label(text = "Knocked player:")
-    private val knockedPlayerName = Label(text = "-")
+    /*Labels to inform about the current state of the game*/
+
+    // label for the current player's name
+    private val currentPlayerName = Label( font = titlesFont )
+    private val nextPlayerLabel = Label(
+        text = "Next player:",
+        font = titlesFont)
+
+    // label for the next player's name
+    private val nextPlayerName = Label( font = playersNameFont, width = 1000 )
+    private val knockedPlayerLabel = Label(
+        text = "Knocked player:",
+        font = titlesFont,
+        isWrapText = true,
+        width = 585
+    )
+    private val knockedPlayerName = Label(text = "-", font = playersNameFont)
 
 
     override fun refreshAfterStartNewGame() {
@@ -192,6 +215,11 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
 
         showCardBack(playersHandCard,cardImageLoader,playersCardLabeledStackView)
         showCardFront(game.middle,cardImageLoader,middleStackLabeledStackView)
+
+        currentPlayerName.text = "It's ${game.players[0].name} turn"
+        nextPlayerName.text = game.players[1].name
+
+        endTurnButton.isDisabled = true
     }
 
 
@@ -205,30 +233,33 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
 
         showCardFront(playersHandCard,cardImageLoader,playersCardLabeledStackView)
         showCardFront(game.middle,cardImageLoader,middleStackLabeledStackView)
+
+        knockButton.isDisabled = hasSomeOneKnocked
     }
 
     override fun refreshAfterEndTurn() {
         val playersHandCard = rootService.gameService.currentPlayer?.handCards
+        val game = rootService.currentGame
         checkNotNull(playersHandCard){"No started game found"}
+        checkNotNull(game) {"No started game found"}
 
         val cardImageLoader = CardImageLoader()
 
         showCardBack(playersHandCard,cardImageLoader,playersCardLabeledStackView)
-        val game = rootService.currentGame
 
-        checkNotNull(game)
-        currentPlayerName.text = game.players[rootService.gameService.currentPlayerIndex].name
+        currentPlayerName.text = "It's " + game.players[rootService.gameService.currentPlayerIndex].name + " turn"
         nextPlayerName.text = game.players[
                 (rootService.gameService.currentPlayerIndex+1) % game.players.size].name
 
-        grid.setRowCenterMode(0,Alignment.CENTER)
-        grid.setRowCenterMode(2,Alignment.CENTER)
+        mainGrid.setRowCenterMode(0,Alignment.CENTER)
+        mainGrid.setRowCenterMode(2,Alignment.CENTER)
 
 
-        knockButton.isDisabled = false
+        knockButton.isDisabled = hasSomeOneKnocked
         passButton.isDisabled = false
         swapAllCardButton.isDisabled = false
         swapOneCardButton.isDisabled = false
+        endTurnButton.isDisabled = true
     }
 
     /*------------------------------------HELP FUNCTION------------------------------*/
@@ -257,8 +288,8 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
     private fun showCardFront(
         cardStack: MutableList<PlayCard>,
         cardImageLoader: CardImageLoader,
-        stackView: List<LabeledStackView>)
-    {
+        stackView: List<LabeledStackView>
+    ) {
         for(i in 0..2){
             val cardView = CardView(
                 height = 200,
@@ -277,60 +308,71 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
     // highlight the selected card
     private fun onSelectedPlayersCards(column: Int, row: Int, cardSide: String){
         if(cardSide == "middle") {
-            grid.setRowCenterMode(0,Alignment.CENTER)
-            grid.setCellCenterMode(column, row, Alignment.TOP_CENTER)
+            mainGrid.setRowCenterMode(0,Alignment.CENTER)
+            mainGrid.setCellCenterMode(column, row, Alignment.TOP_CENTER)
         }else{
-            grid.setRowCenterMode(2,Alignment.CENTER)
-            grid.setCellCenterMode(column, row, Alignment.TOP_CENTER)
+            mainGrid.setRowCenterMode(2,Alignment.CENTER)
+            mainGrid.setCellCenterMode(column, row, Alignment.TOP_CENTER)
         }
+    }
+
+    fun resetGameScene() {
+        hasSomeOneKnocked = false
+        knockedPlayerName.text = "-"
+
+        knockButton.isDisabled = false
     }
     /*--------------------------------------------------------------------------------*/
 
     init {
 
-        grid[0, 0] = drawStack
+        mainGrid[0, 0] = drawStack
         for (i in 1..3) {
-            grid[i, 0] = middleStackLabeledStackView[i - 1]
-            grid[i, 2] = playersCardLabeledStackView[i - 1]
+            mainGrid[i, 0] = middleStackLabeledStackView[i - 1]
+            mainGrid[i, 2] = playersCardLabeledStackView[i - 1]
         }
 
         buttonGrid[0, 0] = knockButton
         buttonGrid[0, 1] = passButton
         buttonGrid[0, 2] = swapOneCardButton
         buttonGrid[0, 3] = swapAllCardButton
-        grid[0, 2] = buttonGrid
+        mainGrid[0, 2] = buttonGrid
         for (i in 0..3) {
             buttonGrid.setRowHeight(i, 50)
         }
 
-        grid[2, 1] = currentPlayerName
+        mainGrid[2, 1] = currentPlayerName
 
         nextPlayerGrid[0, 0] = nextPlayerLabel
         nextPlayerGrid[0, 1] = nextPlayerName
         nextPlayerGrid[0, 3] = knockedPlayerLabel
         nextPlayerGrid[0, 4] = knockedPlayerName
         nextPlayerGrid.setRowHeight(2,100)
-        grid[4, 0] = nextPlayerGrid
+        nextPlayerGrid.setColumnWidth(0,585)
+        mainGrid[4, 0] = nextPlayerGrid
 
         rightSideButtonGrid[0, 0] = flipCardButton
         rightSideButtonGrid[0, 1] = endTurnButton
         rightSideButtonGrid.setRowHeight(0,100)
         rightSideButtonGrid.setRowHeight(1,100)
-        grid[4, 2] = rightSideButtonGrid
+        mainGrid[4, 2] = rightSideButtonGrid
 
-        grid.setColumnWidth(0, 450)
-        grid.setColumnWidth(1, 340)
-        grid.setColumnWidth(2, 340)
-        grid.setColumnWidth(3, 340)
-        grid.setColumnWidth(4, 450)
+        mainGrid.setColumnWidth(0, 450)
+        mainGrid.setColumnWidth(1, 340)
+        mainGrid.setColumnWidth(2, 340)
+        mainGrid.setColumnWidth(3, 340)
+        mainGrid.setColumnWidth(4, 450)
 
-        grid.setRowHeight(0, 360)
-        grid.setRowHeight(1, 300)
-        grid.setRowHeight(2, 360)
+        mainGrid.setRowHeight(0, 360)
+        mainGrid.setRowHeight(1, 300)
+        mainGrid.setRowHeight(2, 360)
+
+        mainGrid.setColumnCenterMode(1, Alignment.CENTER_RIGHT)
+        mainGrid.setColumnCenterMode(3, Alignment.CENTER_LEFT)
 
         background = ColorVisual(129, 178, 154)
 
-        addComponents(grid)
+        addComponents(mainGrid)
     }
 
 }

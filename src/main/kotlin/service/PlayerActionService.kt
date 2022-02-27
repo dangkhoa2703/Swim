@@ -74,19 +74,18 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
      */
     fun pass() {
         // retrieve current game from root service
-        val currentGame = rootService.currentGame
-        checkNotNull(currentGame)
-        val drawStack = currentGame.drawStack
+        val game = rootService.currentGame
+        checkNotNull(game)
         //increment pass counter
         rootService.gameService.increasePassCounter()
         //check if all players chose to pass
-        if(gameService.passCounter == currentGame.players.size)
+        if(gameService.passCounter == game.players.size)
         {
             //test if enough cards are left to change middle cards
-            if(drawStack.size >= 3)
+            if(game.drawStack.size >= 3)
             {
                 //change middle stack, reset pass counter and refresh scene
-                currentGame.middle = gameService.deal3Card().toMutableList()
+                game.middle = gameService.deal3Card().toMutableList()
                 rootService.gameService.resetPassCounter()
                 onAllRefreshables { refreshAfterPlayerAction() }
             }

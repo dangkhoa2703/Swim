@@ -10,6 +10,9 @@ import org.junit.jupiter.api.assertThrows
  */
 class GameServiceTest {
 
+    /**
+     * create a full draw stack manually
+     */
     private val cards = listOf(
         PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
         PlayCard(CardSuit.CLUBS, CardValue.EIGHT),
@@ -235,6 +238,10 @@ class GameServiceTest {
         val tempList = mc.gameService.deal3Card()
         assertEquals(3, tempList.size)
         assertTrue(sizeBeforeDeal > drawStack.size)
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.gameService.deal3Card()
+        }
     }
 
 }
