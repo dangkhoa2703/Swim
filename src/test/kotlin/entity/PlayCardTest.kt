@@ -40,10 +40,10 @@ class PlayCardTest {
         assertEquals(jackOfClubs.value,jackOfDiamonds.value)
         assertNotEquals(aceOfSpades.value,jackOfDiamonds.value)
         assertNotEquals(sevenOfDiamonds.value,aceOfSpades.value)
-        assertNotEquals(2.0,twoOfClubs.value)
-        assertNotEquals(3.0,threeOfClubs.value)
-        assertNotEquals(4.0,fourOfClubs.value)
-        assertNotEquals(5.0,fiveOfClubs.value)
-        assertNotEquals(6.0,sixOfClubs.value)
+        assertEquals(2.0,twoOfClubs.value)
+        assertEquals(3.0,threeOfClubs.value)
+        assertEquals(4.0,fourOfClubs.value)
+        assertEquals(5.0,fiveOfClubs.value)
+        assertEquals(6.0,sixOfClubs.value)
     }
 }
