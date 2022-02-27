@@ -4,6 +4,9 @@ import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
 import kotlin.test.*
 
+/**
+ *  Class for testing the CardImageLoader
+ */
 class CardImageLoaderTest {
     /**
      * The [CardImageLoader] that is tested with this test class
@@ -78,24 +81,21 @@ class CardImageLoaderTest {
 private infix fun BufferedImage.sameAs(other: Any?): Boolean {
 
     // if the other is not even a BufferedImage, we are done already
-    if (other !is BufferedImage) {
-        return false
-    }
-
-    // check dimensions
-    if (this.width != other.width || this.height != other.height) {
+    if ((other !is BufferedImage) || (this.width != other.width) || (this.height != other.height)) {
         return false
     }
 
     // compare every pixel
+    var comp = true
     for (y in 0 until height) {
         for (x in 0 until width) {
-            if (this.getRGB(x, y) != other.getRGB(x, y))
-                return false
+            if (this.getRGB(x, y) != other.getRGB(x, y)) {
+                comp = false
+            }
         }
     }
 
     // if we reach this point, dimensions and pixels match
-    return true
+    return comp
 
 }

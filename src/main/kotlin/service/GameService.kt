@@ -137,15 +137,15 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
      * @return 0 if 2 cards are different; 1 if same value; 2 if same suit; 3 if same suit and same value
      */
     fun compareTwoCards (card1: PlayCard, card2: PlayCard): Int{
-        return if(card1.suit == card2.suit && card1.valueEnum.toString() != card2.valueEnum.toString()){
-            2
+        var result = 0
+        if(card1.suit == card2.suit && card1.valueEnum.toString() != card2.valueEnum.toString()){
+            result = 2
         }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit != card2.suit){
-            1
+            result = 1
         }else if(card1.valueEnum.toString() == card2.valueEnum.toString() && card1.suit == card2.suit){
-            3
-        }else{
-            0
+            result = 3
         }
+        return result
     }
 
     /**

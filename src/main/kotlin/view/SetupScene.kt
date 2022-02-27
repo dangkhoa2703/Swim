@@ -27,15 +27,7 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         height = 300,
         width = 300,
         font = swimFont
-    ).apply{
-
-    }
-
-//    private val p1Label: Label = Label(
-//        width = 100, height = 35,
-//        text = "Player 1:",
-//        font = titlesFont
-//    )
+    )
 
     val p1Input: TextField = TextField(
         width = 200, height = 35
@@ -46,13 +38,6 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         }
     }
 
-//    private val p2Label = Label(
-//        width = 100, height = 35,
-//        text = "Player 2:",
-//        font = titlesFont
-//    )
-
-
     val p2Input: TextField = TextField(
         width = 200, height = 35
     ).apply {
@@ -61,13 +46,6 @@ class SetupScene : MenuScene(400,1080), Refreshable {
                 p1Input.text.isBlank() && this.text.isBlank() && p3Input.text.isBlank() && p4Input.text.isBlank()
         }
     }
-
-
-//    private val p3Label = Label(
-//        width = 100, height = 35,
-//        text = "Player 3:",
-//        font = titlesFont
-//    )
 
     val p3Input: TextField = TextField(
         width = 200, height = 35
@@ -78,12 +56,6 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         }
     }
 
-//    private val p4Label = Label(
-//        width = 100, height = 35,
-//        text = "Player 4:",
-//        font = titlesFont
-//    )
-
     val p4Input: TextField = TextField(
         width = 200, height = 35
     ).apply {
@@ -93,7 +65,6 @@ class SetupScene : MenuScene(400,1080), Refreshable {
         }
     }
 
-//    val labelsList = listOf(p1Label,p2Label,p3Label,p4Label)
 private val labelsList: MutableList<Label> = mutableListOf()
     init{
         for(i in 0..3){
@@ -133,7 +104,6 @@ private val labelsList: MutableList<Label> = mutableListOf()
             playerGrid.setRowHeight(i,50)
         }
         playerGrid.setColumnWidth(0,100)
-//        playerGrid.setColumnWidth(1,300)
         mainGrid[0,1] = playerGrid
 
         buttonsGrid[0,0] = startButton
@@ -141,12 +111,6 @@ private val labelsList: MutableList<Label> = mutableListOf()
         buttonsGrid.setColumnWidth(1,50)
         buttonsGrid.setRowHeight(0,360)
         mainGrid[0,2] = buttonsGrid
-
-//        for(i in 0..4){
-//            mainGrid.setRowHeight(i,100)
-//        }
-//
-//        mainGrid.setRowHeight(5,300)
 
         background = ColorVisual(244,241,222)
 
