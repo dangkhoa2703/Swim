@@ -62,6 +62,10 @@ class GameServiceTest {
         val fourPlayerGame = mc.currentGame
 
         checkNotNull(fourPlayerGame)
+        assertEquals("p1",fourPlayerGame.names[0])
+        assertEquals("p2",fourPlayerGame.names[1])
+        assertEquals("p3",fourPlayerGame.names[2])
+        assertEquals("p4",fourPlayerGame.names[3])
         assertEquals(4, fourPlayerGame.players.size)
         assertEquals(17, fourPlayerGame.drawStack.size)
         assertEquals(3, fourPlayerGame.middle.size)
