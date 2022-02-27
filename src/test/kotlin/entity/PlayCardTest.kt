@@ -13,6 +13,11 @@ class PlayCardTest {
     private val kingOfHearts = PlayCard(CardSuit.HEARTS, CardValue.KING)
     private val jackOfDiamonds = PlayCard(CardSuit.DIAMONDS, CardValue.JACK)
     private val sevenOfDiamonds = PlayCard(CardSuit.DIAMONDS, CardValue.SEVEN)
+    private val twoOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.TWO)
+    private val threeOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.THREE)
+    private val fourOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.FOUR)
+    private val fiveOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.FIVE)
+    private val sixOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.SIX)
 
     /**
      * TODO compare suit of two cards
@@ -35,5 +40,10 @@ class PlayCardTest {
         assertEquals(jackOfClubs.value,jackOfDiamonds.value)
         assertNotEquals(aceOfSpades.value,jackOfDiamonds.value)
         assertNotEquals(sevenOfDiamonds.value,aceOfSpades.value)
+        assertNotEquals(2.0,twoOfClubs.value)
+        assertNotEquals(3.0,threeOfClubs.value)
+        assertNotEquals(4.0,fourOfClubs.value)
+        assertNotEquals(5.0,fiveOfClubs.value)
+        assertNotEquals(6.0,sixOfClubs.value)
     }
 }
