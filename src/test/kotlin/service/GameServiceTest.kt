@@ -55,12 +55,17 @@ class GameServiceTest {
     @Test
     fun testStartNewGame(){
         val mc = RootService()
+        val testRefreshable = TestRefreshable()
+        mc.addRefreshable(testRefreshable)
+        testRefreshable.reset()
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         val fourPlayerGame = mc.currentGame
+
         checkNotNull(fourPlayerGame)
         assertEquals(4, fourPlayerGame.players.size)
         assertEquals(17, fourPlayerGame.drawStack.size)
         assertEquals(3, fourPlayerGame.middle.size)
+        assertTrue(testRefreshable.refreshAfterStartNewGameCalled)
 
 
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3"))
@@ -77,8 +82,11 @@ class GameServiceTest {
         assertEquals(23, twoPlayerGame.drawStack.size)
         assertEquals(3, twoPlayerGame.middle.size)
 
+
+        testRefreshable.reset()
         assertThrows<IllegalArgumentException> {
             mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4","p5"))
+            assertFalse(testRefreshable.refreshAfterStartNewGameCalled)
         }
         assertThrows<IllegalArgumentException> {
             mc.gameService.startNewGame(mutableListOf("p1"))
@@ -176,22 +184,29 @@ class GameServiceTest {
     @Test
     fun testEndTurn(){
         val mc = RootService()
+        val testRefreshable = TestRefreshable()
+        mc.addRefreshable(testRefreshable)
+        testRefreshable.reset()
         mc.gameService.startNewGame(mutableListOf("Harry","Ron","Hermione"))
         val currentGame = mc.currentGame
         checkNotNull(currentGame)
-        mc.gameService.endTurn()
-        mc.gameService.endTurn()
-        mc.gameService.endTurn()
         val index = mc.gameService.currentPlayerIndex
+
+        mc.gameService.endTurn()
+        mc.gameService.endTurn()
+        mc.gameService.endTurn()
         assertEquals(0,index)
+        assertTrue(testRefreshable.refreshAfterEndTurnCalled)
 
         currentGame.players[1].hasKnock = true
         mc.gameService.endTurn()
         assertNotEquals(0.0,currentGame.players[1].score)
 
+        testRefreshable.reset()
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.gameService.endTurn()
+            assertFalse(testRefreshable.refreshAfterEndTurnCalled)
         }
     }
 
@@ -202,6 +217,9 @@ class GameServiceTest {
     @Test
     fun testEndGame(){
         val mc = RootService()
+        val testRefreshable = TestRefreshable()
+        mc.addRefreshable(testRefreshable)
+        testRefreshable.reset()
 
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
 
@@ -210,10 +228,13 @@ class GameServiceTest {
         assertTrue(temp[0].score >= temp[1].score)
         assertTrue(temp[1].score >= temp[2].score)
         assertTrue(temp[2].score >= temp[3].score)
+        assertTrue(testRefreshable.refreshAfterEndGameCalled)
 
+        testRefreshable.reset()
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.gameService.endGame()
+            assertFalse(testRefreshable.refreshAfterEndGameCalled)
         }
     }
 

@@ -19,6 +19,7 @@ class PlayCardTest {
     private val fiveOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.FIVE)
     private val sixOfClubs = PlayCard(CardSuit.DIAMONDS, CardValue.SIX)
 
+
     /**
      * TODO compare suit of two cards
      *
@@ -45,5 +46,25 @@ class PlayCardTest {
         assertEquals(4.0,fourOfClubs.value)
         assertEquals(5.0,fiveOfClubs.value)
         assertEquals(6.0,sixOfClubs.value)
+    }
+
+    /**
+     * TODO test shortDeck function in cardValue
+     *
+     */
+    @Test
+    fun testShortDeck(){
+        val shortDeck = CardValue.shortDeck()
+        assertEquals(8, shortDeck.size)
+    }
+
+    @Test
+    fun testToStringValue(){
+        assertEquals("2",CardValue.TWO.toString())
+        assertEquals("3",CardValue.THREE.toString())
+        assertEquals("4",CardValue.FOUR.toString())
+        assertEquals("5",CardValue.FIVE.toString())
+        assertEquals("6",CardValue.SIX.toString())
+
     }
 }

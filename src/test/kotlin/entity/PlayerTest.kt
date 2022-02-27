@@ -24,5 +24,6 @@ class PlayerTest {
         assertEquals(player1.name , "Player1")
         assertTrue(player1.name.length in 1..15)
         assertThrows<IllegalArgumentException> { Player("",cardList2) }
+        assertThrows<IllegalArgumentException> { Player("12345678910111213141516", cardList2) }
     }
 }

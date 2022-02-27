@@ -40,6 +40,11 @@ class PlayerActionServiceTest {
     @Test
     fun testSwapAllCards(){
         val mc = RootService()
+        val testRefreshable1 = TestRefreshable()
+        val testRefreshable2 = TestRefreshable()
+        mc.addRefreshable(testRefreshable2)
+        mc.addRefreshable(testRefreshable1)
+        testRefreshable1.reset()
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         val currentPlayerIndex = mc.gameService.currentPlayerIndex
         val players = mc.currentGame?.players
@@ -48,13 +53,18 @@ class PlayerActionServiceTest {
         checkNotNull(players)
         checkNotNull(middle)
         mc.playerActionService.swapAllCards()
+        assertTrue(testRefreshable1.refreshAfterPlayerActionCalled)
+        assertTrue(testRefreshable2.refreshAfterPlayerActionCalled)
         assertEquals(0,mc.gameService.passCounter)
         for(i in 0..2){
             assertEquals(3,mc.gameService.compareTwoCards(players[currentPlayerIndex].handCards[i], middle[i]))
         }
+
+        testRefreshable1.reset()
         assertThrows<IllegalStateException> {
             mc.gameService.currentPlayer = null
             mc.playerActionService.swapAllCards()
+            assertFalse(testRefreshable1.refreshAfterPlayerActionCalled)
         }
         assertThrows<IllegalStateException> {
             mc.currentGame = null
@@ -112,6 +122,9 @@ class PlayerActionServiceTest {
     @Test
     fun testPass(){
         val mc = RootService()
+        val testRefreshable = TestRefreshable()
+        mc.addRefreshable(testRefreshable)
+        testRefreshable.reset()
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         val gameService = mc.gameService
         val playerActionService = mc.playerActionService
@@ -128,6 +141,7 @@ class PlayerActionServiceTest {
         assertEquals(3,gameService.currentPlayerIndex)
         playerActionService.pass()
         assertEquals(0,gameService.passCounter)
+        assertTrue(testRefreshable.refreshAfterPlayerActionCalled)
 
         val game = mc.currentGame
         checkNotNull(game)
@@ -139,9 +153,11 @@ class PlayerActionServiceTest {
         mc.playerActionService.pass()
         assertNotEquals(0.0, game.players[0].score)
 
+        testRefreshable.reset()
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.playerActionService.pass()
+            assertFalse(testRefreshable.refreshAfterPlayerActionCalled)
         }
 
 
