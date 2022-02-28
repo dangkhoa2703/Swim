@@ -9,15 +9,30 @@ import entity.Player
  */
 class TestRefreshable: Refreshable {
 
+    /**
+     *  remember if a refreshAfterStartNewGame was called
+     */
     var refreshAfterStartNewGameCalled = false
         private set
 
+
+    /**
+     *  remember if a refreshAfterPlayerActionCalled was called
+     */
     var refreshAfterPlayerActionCalled = false
         private set
 
+
+    /**
+     *  remember if a refreshAfterEndTurnCalled was called
+     */
     var refreshAfterEndTurnCalled = false
         private set
 
+
+    /**
+     *  remember if a refreshAfterEndGame was called
+     */
     var refreshAfterEndGameCalled = false
         private set
 
@@ -31,18 +46,34 @@ class TestRefreshable: Refreshable {
         refreshAfterEndGameCalled = false
     }
 
+    /**
+     * TODO test refreshAfterStartNewGame
+     *
+     */
     override fun refreshAfterStartNewGame() {
         refreshAfterStartNewGameCalled = true
     }
 
+    /**
+     * TODO test refreshAfterPlayerAction
+     *
+     */
     override fun refreshAfterPlayerAction() {
         refreshAfterPlayerActionCalled = true
     }
 
+    /**
+     * TODO test refreshAfterEndTurn
+     *
+     */
     override fun refreshAfterEndTurn() {
         refreshAfterEndTurnCalled = true
     }
 
+    /**
+     * TODO test refreshAfterEndGame
+     *
+     */
     override fun refreshAfterEndGame(players: List<Player>) {
         refreshAfterEndGameCalled = true
     }
