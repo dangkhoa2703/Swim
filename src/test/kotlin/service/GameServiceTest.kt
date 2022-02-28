@@ -49,6 +49,14 @@ class GameServiceTest {
         PlayCard(CardSuit.DIAMONDS, CardValue.ACE)
     )
 
+    @Test
+    fun testSetPlayerIndex(){
+        val mc = RootService()
+        mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
+        mc.gameService.currentPlayerIndex = 2
+        assertEquals(2,mc.gameService.currentPlayerIndex)
+    }
+
     /**
      * TODO test if after create new game, the number of player, cards in draw stack, cards in middle are correct
      *
