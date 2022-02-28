@@ -40,7 +40,7 @@ class SwimApplication : BoardGameApplication("SWIM"), Refreshable {
      */
     private fun resetGame(){
         rootService.currentGame = null
-        rootService.gameService.resetPassCounter()
+        rootService.gameService.passCounter = 0
         rootService.gameService.currentPlayer = null
         rootService.gameService.currentPlayerIndex = 0
     }

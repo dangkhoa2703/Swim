@@ -20,7 +20,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         val currentPlayer = rootService.gameService.currentPlayer
         checkNotNull(currentPlayer)
         currentPlayer.hasKnock = true
-        rootService.gameService.resetPassCounter()
+        rootService.gameService.passCounter = 0
         rootService.gameService.endTurn()
     }
 
@@ -33,7 +33,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         val currentPlayer = rootService.gameService.currentPlayer
         checkNotNull(currentGame)
         checkNotNull(currentPlayer)
-        rootService.gameService.resetPassCounter()
+        rootService.gameService.passCounter = 0
         val tempHandCards = currentPlayer.handCards.toMutableList()
         val tempMiddle = currentGame.middle.toMutableList()
         for(i in 0..2){
@@ -54,7 +54,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         val currentGame = rootService.currentGame
         checkNotNull(currentPlayer)
         checkNotNull(currentGame)
-        rootService.gameService.resetPassCounter()
+        rootService.gameService.passCounter = 0
 
         val playerCardSuit = currentPlayer.handCards[playerCardIndex].suitEnum
         val playerCardValue = currentPlayer.handCards[playerCardIndex].valueEnum
@@ -77,7 +77,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
         val game = rootService.currentGame
         checkNotNull(game)
         //increment pass counter
-        rootService.gameService.increasePassCounter()
+        rootService.gameService.passCounter++
         //check if all players chose to pass
         if(gameService.passCounter == game.players.size)
         {
@@ -86,7 +86,7 @@ class PlayerActionService(private val rootService: RootService) : AbstractRefres
             {
                 //change middle stack, reset pass counter and refresh scene
                 game.middle = gameService.deal3Card().toMutableList()
-                rootService.gameService.resetPassCounter()
+                rootService.gameService.passCounter = 0
                 onAllRefreshables { refreshAfterPlayerAction() }
             }
             //end game and refresh scene

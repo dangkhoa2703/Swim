@@ -175,29 +175,16 @@ class GameServiceTest {
     }
 
     /**
-     * TODO test if the PassCounter is set to 0 when calling function
-     *
-     */
-    @Test
-    fun testResetPassCounter(){
-        val mc = RootService()
-        mc.gameService.increasePassCounter()
-        mc.gameService.increasePassCounter()
-        mc.gameService.increasePassCounter()
-        mc.gameService.resetPassCounter()
-        assertEquals(0,mc.gameService.passCounter)
-    }
-
-    /**
      * TODO test if PassCounter is increase by 1 when calling function
      *
      */
     @Test
-    fun testIncreasePassCounter(){
+    fun testGetPassCounter(){
         val mc = RootService()
-        mc.gameService.resetPassCounter()
-        mc.gameService.increasePassCounter()
-        mc.gameService.increasePassCounter()
+        mc.gameService.passCounter = 0
+        assertEquals(0, mc.gameService.passCounter)
+        mc.gameService.passCounter++
+        mc.gameService.passCounter++
         assertEquals(2,mc.gameService.passCounter)
     }
 
@@ -314,6 +301,27 @@ class GameServiceTest {
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.gameService.deal3Card()
+        }
+    }
+
+    /**
+     * TODO test if the current player is correctly set
+     *
+     */
+    @Test
+    fun testSetCurrentPlayer(){
+        val mc = RootService()
+        mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
+        val game = mc.currentGame
+        checkNotNull(game)
+        assertEquals(game.players[0].name, mc.gameService.currentPlayer?.name)
+
+        mc.gameService.setCurrentPlayer()
+        assertEquals(game.players[0].name, mc.gameService.currentPlayer?.name)
+
+        assertThrows<IllegalStateException> {
+            mc.currentGame = null
+            mc.gameService.setCurrentPlayer()
         }
     }
 

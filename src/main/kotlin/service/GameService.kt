@@ -33,9 +33,7 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         }
         val game = Swim(names, middle, drawStack,tempPlayer.toMutableList())
         rootService.currentGame = game
-        val currentGame = rootService.currentGame
-        checkNotNull(currentGame)
-        currentPlayer = currentGame.players[currentPlayerIndex]
+        setCurrentPlayer()
 
         onAllRefreshables { refreshAfterStartNewGame() }
     }
@@ -78,23 +76,6 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
             totalValue = temp
         }
         return totalValue
-    }
-
-
-    /**
-     * TODO reset pass counter to 0
-     *
-     */
-    fun resetPassCounter(){
-        passCounter = 0
-    }
-
-    /**
-     * TODO increase pass counter by 1
-     *
-     */
-    fun increasePassCounter(){
-        passCounter++
     }
 
     /**
@@ -211,4 +192,13 @@ class GameService(private val rootService: RootService): AbstractRefreshingServi
         return temp
     }
 
+    /**
+     * TODO set the current player
+     *
+     */
+    fun setCurrentPlayer() {
+        val currentGame = rootService.currentGame
+        checkNotNull(currentGame)
+        currentPlayer = currentGame.players[currentPlayerIndex]
+    }
 }

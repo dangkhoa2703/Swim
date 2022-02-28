@@ -11,7 +11,7 @@ class CardImageLoaderTest {
     /**
      * The [CardImageLoader] that is tested with this test class
      */
-    private val imageLoader: CardImageLoader = CardImageLoader()
+    private val imageLoader:CardImageLoader = CardImageLoader()
 
     /**
      * A queen of hearts test image that is used to be compared to image

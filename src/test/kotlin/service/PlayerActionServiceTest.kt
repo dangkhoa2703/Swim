@@ -133,7 +133,7 @@ class PlayerActionServiceTest {
         val gameService = mc.gameService
         val playerActionService = mc.playerActionService
 
-        gameService.resetPassCounter()
+        gameService.passCounter = 0
         playerActionService.pass()
         assertEquals(1,gameService.passCounter)
         assertEquals(1,gameService.currentPlayerIndex)
