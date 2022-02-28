@@ -77,6 +77,8 @@ class PlayerActionServiceTest {
     @Test
     fun testSwapOneCard(){
         val mc = RootService()
+        val testRefreshable = TestRefreshable()
+        mc.addRefreshable(testRefreshable)
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         val currentPlayerIndex = mc.gameService.currentPlayerIndex
         val players = mc.currentGame?.players
@@ -102,10 +104,13 @@ class PlayerActionServiceTest {
 
         mc.playerActionService.swapOneCard(2,0)
         assertTrue(30.0 == mc.gameService.evaluatePlayCards(players[currentPlayerIndex]))
+        assertTrue(testRefreshable.refreshAfterPlayerActionCalled)
 
+        testRefreshable.reset()
         assertThrows<IllegalStateException> {
             mc.currentGame = null
             mc.playerActionService.swapOneCard(2,0)
+            assertFalse(testRefreshable.refreshAfterPlayerActionCalled)
         }
         assertThrows<IllegalStateException> {
             mc.gameService.currentPlayer = null
