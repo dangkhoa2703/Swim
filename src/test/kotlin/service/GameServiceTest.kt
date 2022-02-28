@@ -2,6 +2,7 @@ package service
 
 import kotlin.test.*
 import entity.*
+import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 
 /**
@@ -58,9 +59,11 @@ class GameServiceTest {
         val testRefreshable = TestRefreshable()
         mc.addRefreshable(testRefreshable)
         testRefreshable.reset()
-        mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
-        val fourPlayerGame = mc.currentGame
 
+        assertDoesNotThrow {
+            mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
+        }
+        val fourPlayerGame = mc.currentGame
         assertNotNull(fourPlayerGame)
         assertEquals("p1",fourPlayerGame.names[0])
         assertEquals("p2",fourPlayerGame.names[1])
@@ -123,34 +126,43 @@ class GameServiceTest {
             PlayCard(CardSuit.CLUBS, CardValue.KING),
             PlayCard(CardSuit.DIAMONDS, CardValue.ACE)
         )
-        //none of the cards have the same suit
-        val cardList4 = mutableListOf(
-            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
-            PlayCard(CardSuit.DIAMONDS, CardValue.NINE),
-            PlayCard(CardSuit.SPADES, CardValue.EIGHT)
-        )
 
-        val cardList5 = mutableListOf(
+        val cardList4 = mutableListOf(
             PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
             PlayCard(CardSuit.DIAMONDS, CardValue.NINE),
             PlayCard(CardSuit.DIAMONDS, CardValue.QUEEN)
         )
 
+        val cardList5 = mutableListOf(
+            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
+            PlayCard(CardSuit.DIAMONDS, CardValue.NINE),
+            PlayCard(CardSuit.CLUBS, CardValue.KING)
+        )
+
+        //none of the cards have the same suit
+        val cardList6 = mutableListOf(
+            PlayCard(CardSuit.CLUBS, CardValue.SEVEN),
+            PlayCard(CardSuit.DIAMONDS, CardValue.NINE),
+            PlayCard(CardSuit.SPADES, CardValue.EIGHT)
+        )
+
         val players = mc.currentGame?.players
         checkNotNull(players)
 
-        mc.currentGame!!.players[0] = Player("p1",cardList1)
-        mc.currentGame!!.players[1] = Player("p2",cardList2)
-        mc.currentGame!!.players[2] = Player("p3",cardList3)
-        mc.currentGame!!.players[3] = Player("p4",cardList4)
+        val players1 = Player("p1",cardList1)
+        val players2 = Player("p2",cardList2)
+        val players3 = Player("p3",cardList3)
+        val players4 = Player("p4",cardList4)
+        val players5 = Player("p5",cardList5)
+        val players6 = Player("p6",cardList6)
 
-        assertEquals(30.5,mc.gameService.evaluatePlayCards(players[1]))
-        assertEquals(20.0,mc.gameService.evaluatePlayCards(players[2]))
-        assertEquals(9.0,mc.gameService.evaluatePlayCards(players[3]))
-        assertEquals(31.0,mc.gameService.evaluatePlayCards(players[0]))
 
-        mc.currentGame!!.players[3] = Player("p5",cardList5)
-        assertEquals(19.0,mc.gameService.evaluatePlayCards(players[3]))
+        assertEquals(31.0,mc.gameService.evaluatePlayCards(players1))
+        assertEquals(30.5,mc.gameService.evaluatePlayCards(players2))
+        assertEquals(20.0,mc.gameService.evaluatePlayCards(players3))
+        assertEquals(19.0,mc.gameService.evaluatePlayCards(players4))
+        assertEquals(17.0,mc.gameService.evaluatePlayCards(players5))
+        assertEquals(9.0,mc.gameService.evaluatePlayCards(players6))
 
     }
 
