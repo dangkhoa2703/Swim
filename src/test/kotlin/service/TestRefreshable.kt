@@ -37,7 +37,8 @@ class TestRefreshable: Refreshable {
         private set
 
     /**
-     * resets all *Called properties to false
+     * TODO reset all refresh variable to false
+     *
      */
     fun reset() {
         refreshAfterStartNewGameCalled = false

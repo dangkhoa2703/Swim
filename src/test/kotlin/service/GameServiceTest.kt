@@ -49,8 +49,12 @@ class GameServiceTest {
         PlayCard(CardSuit.DIAMONDS, CardValue.ACE)
     )
 
+    /**
+     * TODO test setter of the player current index
+     *
+     */
     @Test
-    fun testSetPlayerIndex(){
+    fun testSetCurrentPlayerIndex(){
         val mc = RootService()
         mc.gameService.startNewGame(mutableListOf("p1","p2","p3","p4"))
         mc.gameService.currentPlayerIndex = 2
@@ -272,9 +276,6 @@ class GameServiceTest {
         val mc = RootService()
         val cardList = mc.gameService.createDrawStack()
         assertEquals(32,cardList.size)
-//        cardList.forEach { ele ->
-//            assertTrue(cards.contains(ele))
-//        }
     }
 
     /**
