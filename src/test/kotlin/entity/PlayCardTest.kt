@@ -58,6 +58,10 @@ class PlayCardTest {
         assertEquals(8, shortDeck.size)
     }
 
+    /**
+     * TODO test if String value are correctly placed
+     *
+     */
     @Test
     fun testToStringValue(){
         assertEquals("2",CardValue.TWO.toString())

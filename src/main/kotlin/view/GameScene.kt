@@ -184,9 +184,9 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         }
     }
 
-    /*--------------------End-of-button-area-------------------*/
+    /*---------------------------------------------------------*/
 
-    /*Labels to inform about the current state of the game*/
+    /*--Labels to inform about the current state of the game--*/
 
     // label for the current player's name
     private val currentPlayerName = Label( font = titlesFont )
@@ -204,6 +204,7 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
     )
     private val knockedPlayerName = Label(text = "-", font = playersNameFont)
 
+    /*---------------------------------------------------------*/
 
     override fun refreshAfterStartNewGame() {
         val playersHandCard = rootService.gameService.currentPlayer?.handCards

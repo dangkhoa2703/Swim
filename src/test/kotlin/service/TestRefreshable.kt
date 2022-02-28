@@ -4,8 +4,9 @@ import view.Refreshable
 import entity.Player
 
 /**
- * [Refreshable] implementation that refreshes nothing, but remembers
- * if a refresh method has been called (since last [reset])
+ * TODO [Refreshable] implementation that refreshes nothing, but remembers
+ *  if a refresh method has been called (since last [reset])
+ *
  */
 class TestRefreshable: Refreshable {
 
