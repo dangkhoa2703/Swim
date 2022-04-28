@@ -195,12 +195,11 @@ class GameScene(private val rootService: RootService) : BoardGameScene(1920,1080
         font = titlesFont)
 
     // label for the next player's name
-    private val nextPlayerName = Label( font = playersNameFont, width = 1000 )
+    private val nextPlayerName = Label( font = playersNameFont )
     private val knockedPlayerLabel = Label(
         text = "Knocked player:",
         font = titlesFont,
-        isWrapText = true,
-        width = 585
+        isWrapText = true
     )
     private val knockedPlayerName = Label(text = "-", font = playersNameFont)
 
